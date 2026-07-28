@@ -1,0 +1,5 @@
+# Fotos originais em alta resolução (não usadas pelo site; ficam só localmente)
+imagens/*.jpg
+imagens/*.jpeg
+imagens/*.png
+imagens/*.mp4

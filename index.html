@@ -1,0 +1,1730 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="Menu digital do duforno — deliciosas francesinhas do forno para o prato. Disponível em português, inglês, francês e espanhol." />
+<title>duforno — Ementa Digital</title>
+<style>
+  :root {
+    --brasa: #c1502e;
+    --brasa-dark: #9c3d22;
+    --carvao: #201a17;
+    --carvao-suave: #2c241f;
+    --creme: #f6ede1;
+    --creme-forte: #eaddc9;
+    --dourado: #d9a441;
+    --texto-claro: #f6ede1;
+    --texto-suave: #c9b8a5;
+    --sombra: rgba(0, 0, 0, 0.35);
+    font-family: 'Georgia', 'Iowan Old Style', serif;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--carvao);
+    color: var(--texto-claro);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .pagina {
+    max-width: 1040px;
+    margin: 0 auto;
+    min-height: 100vh;
+    background: var(--carvao);
+    box-shadow: 0 0 60px var(--sombra);
+  }
+
+  header.topo {
+    position: relative;
+    padding: 2.4rem 1.5rem 2.4rem;
+    text-align: center;
+    background:
+      radial-gradient(ellipse at top, rgba(193, 80, 46, 0.25), transparent 60%),
+      linear-gradient(180deg, var(--carvao-suave), var(--carvao));
+    border-bottom: 1px solid rgba(217, 164, 65, 0.25);
+  }
+
+  .topo-controlos {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.4rem;
+  }
+
+  .idiomas {
+    display: flex;
+    justify-content: center;
+    gap: 0.4rem;
+  }
+
+  .idiomas button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.8rem;
+    border-radius: 999px;
+    border: 1px solid rgba(217, 164, 65, 0.3);
+    background: transparent;
+    color: var(--texto-suave);
+    font-family: inherit;
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .idiomas button svg {
+    width: 18px;
+    height: 12px;
+    border-radius: 2px;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.25);
+    flex: 0 0 auto;
+    display: block;
+  }
+  .idiomas button:hover { border-color: var(--dourado); color: var(--creme); }
+  .idiomas button.ativo {
+    background: var(--dourado);
+    border-color: var(--dourado);
+    color: var(--carvao);
+    font-weight: bold;
+  }
+
+  .marca {
+    display: block;
+    width: min(280px, 70vw);
+    height: auto;
+    margin: 0 auto 0.6rem;
+  }
+
+  header.topo p.subtitulo {
+    margin: 0.5rem 0 0;
+    color: var(--dourado);
+    font-style: italic;
+    font-size: 1.05rem;
+    letter-spacing: 0.02em;
+  }
+
+  .linha-decorativa {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    margin-top: 1.4rem;
+    color: var(--texto-suave);
+  }
+  .linha-decorativa span { font-size: 0.75rem; letter-spacing: 0.15em; }
+  .linha-decorativa .traco {
+    width: 46px;
+    height: 1px;
+    background: rgba(217, 164, 65, 0.5);
+  }
+
+  .botao-menu {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.5rem 0.9rem;
+    border-radius: 8px;
+    border: 1px solid rgba(217, 164, 65, 0.4);
+    background: transparent;
+    color: var(--creme);
+    font-family: inherit;
+    font-size: 0.85rem;
+    letter-spacing: 0.03em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .botao-menu:hover { border-color: var(--dourado); background: rgba(217, 164, 65, 0.1); }
+  .botao-menu .icone { font-size: 1.05rem; line-height: 1; }
+
+  .fundo-menu {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+    z-index: 25;
+  }
+  .fundo-menu.visivel { opacity: 1; pointer-events: auto; }
+
+  nav.categorias {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 30;
+    width: 270px;
+    max-width: 82vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    background: var(--carvao-suave);
+    border-right: 1px solid rgba(217, 164, 65, 0.25);
+    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.4);
+    transform: translateX(-100%);
+    transition: transform 0.28s ease;
+    scrollbar-width: thin;
+  }
+
+  nav.categorias.aberto { transform: translateX(0); }
+
+  .cabecalho-menu {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.1rem 1.3rem;
+    border-bottom: 1px solid rgba(217, 164, 65, 0.2);
+  }
+  .cabecalho-menu span {
+    color: var(--dourado);
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .botao-fechar-menu {
+    background: transparent;
+    border: none;
+    color: var(--texto-suave);
+    font-size: 1.3rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0.2rem 0.5rem;
+  }
+  .botao-fechar-menu:hover { color: var(--creme); }
+
+  nav.categorias button {
+    width: 100%;
+    text-align: left;
+    padding: 0.95rem 1.4rem;
+    border: none;
+    border-bottom: 1px solid rgba(217, 164, 65, 0.12);
+    border-radius: 0;
+    background: transparent;
+    color: var(--texto-suave);
+    font-family: inherit;
+    font-size: 0.9rem;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+    white-space: normal;
+    line-height: 1.3;
+    position: relative;
+  }
+
+  nav.categorias button:hover {
+    background: rgba(217, 164, 65, 0.08);
+    color: var(--creme);
+  }
+
+  nav.categorias button.ativo {
+    background: rgba(193, 80, 46, 0.2);
+    color: var(--creme);
+    font-weight: bold;
+  }
+
+  nav.categorias button.ativo::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: var(--brasa);
+  }
+
+  main {
+    padding: 1.8rem 1.5rem 3rem;
+  }
+
+  section.categoria {
+    margin-bottom: 3.4rem;
+    scroll-margin-top: 1.5rem;
+  }
+
+  section.categoria > h2 {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    font-size: 1.5rem;
+    color: var(--dourado);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0 0 0.3rem;
+  }
+
+  section.categoria > .descricao-categoria {
+    color: var(--texto-suave);
+    font-style: italic;
+    font-size: 0.92rem;
+    margin: 0 0 1.4rem;
+  }
+
+  /* Cartões com fotografia (destaques) */
+  .grelha-fotos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.6rem;
+  }
+
+  .item {
+    display: flex;
+    flex-direction: column;
+    border-radius: 16px;
+    overflow: hidden;
+    background: var(--carvao-suave);
+    border: 1px solid rgba(217, 164, 65, 0.18);
+    box-shadow: 0 10px 24px var(--sombra);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+  }
+
+  .item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 30px var(--sombra);
+  }
+
+  .item .foto {
+    width: 100%;
+    height: 230px;
+    background: linear-gradient(160deg, var(--carvao-suave), var(--carvao));
+  }
+  .item .foto img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .item .info { padding: 1.1rem 1.3rem 1.4rem; }
+
+  .item .info .linha-topo {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.8rem;
+  }
+
+  .item .info h3 {
+    margin: 0 0 0.4rem;
+    font-size: 1.22rem;
+    color: var(--creme);
+    font-weight: normal;
+    line-height: 1.3;
+  }
+
+  .item .info .preco {
+    flex: 0 0 auto;
+    font-size: 1.05rem;
+    color: var(--brasa);
+    font-weight: bold;
+    white-space: nowrap;
+  }
+
+  .item .info p {
+    margin: 0;
+    color: var(--texto-suave);
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  .etiqueta {
+    display: inline-block;
+    margin-left: 0.5rem;
+    font-size: 0.6rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--carvao);
+    background: var(--dourado);
+    padding: 0.15rem 0.45rem;
+    border-radius: 4px;
+    vertical-align: middle;
+  }
+
+  /* Listas de texto (categorias completas com preços) */
+  .lista {
+    border: 1px solid rgba(217, 164, 65, 0.2);
+    border-radius: 14px;
+    padding: 0.4rem 1.4rem;
+    background: rgba(255, 255, 255, 0.015);
+  }
+
+  /* Cartões horizontais (foto de um lado, informação do outro) */
+  .grelha-cartoes-horizontais {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+  }
+
+  .lista-item {
+    display: flex;
+    border-radius: 14px;
+    overflow: hidden;
+    background: var(--carvao-suave);
+    border: 1px solid rgba(217, 164, 65, 0.18);
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .lista-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px var(--sombra);
+  }
+
+  .lista-item .foto-metade {
+    flex: 0 0 108px;
+    width: 108px;
+    min-height: 108px;
+    background: linear-gradient(160deg, var(--carvao-suave), var(--carvao));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .lista-item .foto-metade img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .lista-item .info-metade {
+    flex: 1 1 58%;
+    min-width: 0;
+    padding: 0.9rem 1.1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .lista-item .linha-topo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .lista-item h3 {
+    margin: 0;
+    font-size: 1rem;
+    color: var(--creme);
+    font-weight: normal;
+    line-height: 1.3;
+  }
+
+  .lista-item .preco {
+    font-size: 0.98rem;
+    color: var(--brasa);
+    font-weight: bold;
+  }
+
+  .lista-item .ver-mais {
+    margin-top: 0.6rem;
+    color: var(--dourado);
+    font-size: 0.76rem;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+  .lista-item .ver-mais::after {
+    content: '→';
+    transition: transform 0.2s ease;
+  }
+  .lista-item:hover .ver-mais::after { transform: translateX(3px); }
+
+  .subtitulo-lista {
+    color: var(--dourado);
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 1.6rem 0 0.2rem;
+  }
+  .subtitulo-lista:first-child { margin-top: 0.6rem; }
+
+  /* Extras em grelha compacta de duas colunas */
+  .grelha-extras {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 0 2rem;
+  }
+  .linha-extra {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.55rem 0;
+    border-bottom: 1px dashed rgba(217, 164, 65, 0.15);
+    font-size: 0.9rem;
+  }
+  .linha-extra span:first-child { color: var(--texto-claro); }
+  .linha-extra span:last-child { color: var(--brasa); font-weight: bold; white-space: nowrap; }
+
+  footer.rodape {
+    text-align: center;
+    padding: 2.4rem 1.5rem 3rem;
+    border-top: 1px solid rgba(217, 164, 65, 0.2);
+    color: var(--texto-suave);
+    font-size: 0.85rem;
+  }
+
+  footer.rodape .redes {
+    margin-top: 0.5rem;
+    color: var(--dourado);
+    font-size: 0.85rem;
+  }
+
+  footer.rodape a {
+    color: var(--dourado);
+    text-decoration: none;
+  }
+  footer.rodape a:hover { text-decoration: underline; }
+
+  footer.rodape .aviso {
+    margin-top: 1rem;
+    font-size: 0.72rem;
+    color: rgba(201, 184, 165, 0.55);
+    line-height: 1.5;
+  }
+
+  @media (max-width: 600px) {
+    main { padding: 1.4rem 1rem 2.4rem; }
+  }
+
+  @media (max-width: 480px) {
+    .marca { width: min(220px, 65vw); }
+    .grelha-fotos { grid-template-columns: 1fr; }
+    .item .foto { height: 210px; }
+    .lista { padding: 0.4rem 1rem; }
+    .lista-item .info-metade { padding: 0.7rem 0.8rem; }
+    .lista-item h3 { font-size: 0.92rem; }
+  }
+
+  /* Modal de detalhe do prato */
+  .fundo-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+    z-index: 40;
+  }
+  .fundo-modal.visivel { opacity: 1; pointer-events: auto; }
+
+  .modal-prato {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: min(480px, 92vw);
+    max-height: 88vh;
+    overflow-y: auto;
+    background: var(--carvao-suave);
+    border-radius: 18px;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+    z-index: 41;
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, -50%) scale(0.96);
+    transition: opacity 0.22s ease, transform 0.22s ease;
+  }
+  .modal-prato.aberto {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  .modal-fechar {
+    position: absolute;
+    top: 0.8rem;
+    right: 0.8rem;
+    z-index: 2;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1px solid rgba(217, 164, 65, 0.4);
+    background: rgba(32, 26, 23, 0.7);
+    color: var(--creme);
+    font-size: 1rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s ease, border-color 0.15s ease;
+  }
+  .modal-fechar:hover { background: var(--brasa); border-color: var(--brasa); }
+
+  .modal-foto {
+    width: 100%;
+    height: 320px;
+    border-radius: 18px 18px 0 0;
+    background: linear-gradient(160deg, var(--carvao-suave), var(--carvao));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .modal-foto img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  .modal-corpo { padding: 1.5rem 1.6rem 1.9rem; }
+
+  .modal-corpo h3 {
+    margin: 0 0 0.3rem;
+    font-size: 1.5rem;
+    color: var(--creme);
+    font-weight: normal;
+    line-height: 1.25;
+  }
+  .modal-nome-secundario {
+    display: block;
+    font-size: 0.85rem;
+    font-style: italic;
+    color: var(--texto-suave);
+    margin-top: 0.25rem;
+  }
+
+  .modal-preco {
+    color: var(--brasa);
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin: 0.4rem 0 1rem;
+  }
+
+  .modal-desc {
+    color: var(--texto-suave);
+    font-size: 0.94rem;
+    line-height: 1.6;
+    margin: 0 0 1.3rem;
+  }
+  .modal-desc p { margin: 0 0 0.8rem; }
+  .modal-desc p:last-child { margin-bottom: 0; }
+
+  .modal-ingredientes-titulo {
+    color: var(--dourado);
+    text-transform: uppercase;
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    margin: 0 0 0.7rem;
+  }
+
+  .lista-ingredientes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .lista-ingredientes.lista-ingredientes-fotos {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 1.1rem;
+    padding-bottom: 0.4rem;
+  }
+
+  .ingrediente-foto {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.45rem;
+    flex: 0 0 auto;
+    width: 68px;
+  }
+  .ingrediente-foto img {
+    width: 62px;
+    height: 62px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(217, 164, 65, 0.4);
+  }
+  .ingrediente-foto span {
+    font-size: 0.7rem;
+    color: var(--texto-suave);
+    text-align: center;
+    line-height: 1.25;
+  }
+
+  .tag-ingrediente {
+    background: rgba(217, 164, 65, 0.1);
+    border: 1px solid rgba(217, 164, 65, 0.3);
+    color: var(--creme-forte);
+    font-size: 0.8rem;
+    padding: 0.35rem 0.85rem;
+    border-radius: 999px;
+  }
+
+</style>
+</head>
+<body>
+  <div class="pagina">
+    <header class="topo">
+      <div class="topo-controlos">
+        <button class="botao-menu" id="botao-abrir-menu" aria-label="Abrir menu">
+          <span class="icone">☰</span>
+          <span id="texto-botao-menu"></span>
+        </button>
+        <div class="idiomas" id="seletor-idiomas"></div>
+      </div>
+      <img class="marca" src="imagens/web/logo.png" alt="duforno" />
+      <p class="subtitulo" id="texto-subtitulo"></p>
+      <div class="linha-decorativa">
+        <span class="traco"></span>
+        <span id="texto-ementa"></span>
+        <span class="traco"></span>
+      </div>
+    </header>
+
+    <div class="fundo-menu" id="fundo-menu"></div>
+
+    <div class="fundo-modal" id="fundo-modal"></div>
+    <div class="modal-prato" id="modal-prato">
+      <button class="modal-fechar" id="modal-fechar" aria-label="Fechar">✕</button>
+      <div class="modal-foto" id="modal-foto"></div>
+      <div class="modal-corpo">
+        <h3>
+          <span id="modal-nome-principal"></span>
+          <span class="modal-nome-secundario" id="modal-nome-secundario"></span>
+        </h3>
+        <span id="modal-badge"></span>
+        <p class="modal-preco" id="modal-preco"></p>
+        <p class="modal-desc" id="modal-desc"></p>
+        <p class="modal-ingredientes-titulo" id="modal-ingredientes-titulo"></p>
+        <div class="lista-ingredientes" id="modal-lista-ingredientes"></div>
+      </div>
+    </div>
+
+    <nav class="categorias" id="nav-categorias">
+      <div class="cabecalho-menu">
+        <span id="texto-cabecalho-menu"></span>
+        <button class="botao-fechar-menu" id="botao-fechar-menu" aria-label="Fechar menu">✕</button>
+      </div>
+      <div id="itens-nav-categorias"></div>
+    </nav>
+
+    <div class="coluna-conteudo">
+      <main id="conteudo"></main>
+
+      <footer class="rodape">
+        <p id="rodape-nome"></p>
+        <p class="redes">
+          <a href="https://www.instagram.com/duforno.pt" target="_blank" rel="noopener">Instagram @duforno.pt</a>
+          &nbsp;·&nbsp;
+          <a href="https://www.facebook.com/duforno.pt" target="_blank" rel="noopener">Facebook duforno.pt</a>
+        </p>
+        <p class="aviso" id="rodape-aviso"></p>
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    const IDIOMAS = [
+      { codigo: 'pt', rotulo: 'PT', bandeiraSvg: '<svg viewBox="0 0 30 20" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="20" fill="#D9262A"/><rect width="12" height="20" fill="#046A38"/><circle cx="12" cy="10" r="4.5" fill="#FFD700" stroke="#fff" stroke-width="0.6"/></svg>' },
+      { codigo: 'en', rotulo: 'EN', bandeiraSvg: '<svg viewBox="0 0 60 30" xmlns="http://www.w3.org/2000/svg"><rect width="60" height="30" fill="#00247d"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#cf142b" stroke-width="2"/><path d="M30,0 V30 M0,15 H60" stroke="#fff" stroke-width="10"/><path d="M30,0 V30 M0,15 H60" stroke="#cf142b" stroke-width="6"/></svg>' },
+      { codigo: 'fr', rotulo: 'FR', bandeiraSvg: '<svg viewBox="0 0 30 20" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="20" fill="#fff"/><rect width="10" height="20" fill="#0055A4"/><rect x="20" width="10" height="20" fill="#EF4135"/></svg>' },
+      { codigo: 'es', rotulo: 'ES', bandeiraSvg: '<svg viewBox="0 0 30 20" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="20" fill="#AA151B"/><rect y="5" width="30" height="10" fill="#F1BF00"/></svg>' },
+    ];
+
+    const UI = {
+      subtitulo: {
+        pt: "Deliciosas francesinhas do forno para o prato",
+        en: "Delicious oven-baked francesinhas, from the oven to your plate",
+        fr: "De délicieuses francesinhas du four à votre assiette",
+        es: "Deliciosas francesinhas del horno al plato",
+      },
+      ementa: { pt: 'EMENTA', en: 'MENU', fr: 'MENU', es: 'MENÚ' },
+      tituloAba: {
+        pt: 'duforno — Ementa Digital',
+        en: 'duforno — Digital Menu',
+        fr: 'duforno — Menu Numérique',
+        es: 'duforno — Menú Digital',
+      },
+      rodapeNome: {
+        pt: 'duforno — Deliciosas francesinhas do forno para o prato',
+        en: 'duforno — Delicious oven-baked francesinhas, from the oven to your plate',
+        fr: 'duforno — De délicieuses francesinhas du four à votre assiette',
+        es: 'duforno — Deliciosas francesinhas del horno al plato',
+      },
+      aviso: {
+        pt: 'Os nossos produtos contêm alergénios. Preços em euros com IVA incluído. Imagens ilustrativas.',
+        en: 'Our products contain allergens. Prices in euros with VAT included. Images merely illustrative.',
+        fr: 'Nos produits contiennent des allergènes. Prix en euros, TVA incluse. Images à titre indicatif.',
+        es: 'Nuestros productos contienen alérgenos. Precios en euros con IVA incluido. Imágenes meramente ilustrativas.',
+      },
+      menuBotao: { pt: 'Menu', en: 'Menu', fr: 'Menu', es: 'Menú' },
+      menuCabecalho: { pt: 'Categorias', en: 'Categories', fr: 'Catégories', es: 'Categorías' },
+      ingredientesTitulo: { pt: 'Ingredientes', en: 'Ingredients', fr: 'Ingrédients', es: 'Ingredientes' },
+      verIngredientes: { pt: 'Ver ingredientes', en: 'View ingredients', fr: 'Voir les ingrédients', es: 'Ver ingredientes' },
+    };
+
+    const BADGES = {
+      novo: { pt: 'Novo', en: 'New', fr: 'Nouveau', es: 'Nuevo' },
+      vegetariano: { pt: 'Vegetariano', en: 'Vegetarian', fr: 'Végétarien', es: 'Vegetariano' },
+      vegan: { pt: 'Vegan', en: 'Vegan', fr: 'Végane', es: 'Vegano' },
+    };
+
+    const FRANCESINHA_DUFORNO_DESC_MODAL = {
+      pt: [
+        'Quem já provou sabe que não há nada que substitui o sabor de uma boa francesinha.',
+        'Nos restaurantes duforno®, acreditamos que são os pequenos detalhes que fazem as grandes diferenças, por isso, a atenção a cada etapa do processo é imprescindível. Desde o bife de novilho cuidadosamente selecionado, ao nosso delicioso molho de francesinha, a francesinha duforno® é irresistível.',
+      ],
+      en: [
+        "Anyone who has tried it knows there's nothing quite like the taste of a good francesinha.",
+        "At duforno® restaurants, we believe it's the small details that make the biggest difference, which is why attention to every step of the process is essential. From the carefully selected beef steak to our delicious francesinha gravy, the francesinha duforno® is simply irresistible.",
+      ],
+      fr: [
+        "Quiconque l'a déjà goûtée sait qu'il n'y a rien qui remplace la saveur d'une bonne francesinha.",
+        "Dans les restaurants duforno®, nous croyons que ce sont les petits détails qui font toute la différence, c'est pourquoi l'attention portée à chaque étape est essentielle. Du steak de bœuf soigneusement sélectionné à notre délicieuse sauce francesinha, la francesinha duforno® est tout simplement irrésistible.",
+      ],
+      es: [
+        'Quien ya la ha probado sabe que no hay nada que sustituya el sabor de una buena francesinha.',
+        'En los restaurantes duforno®, creemos que son los pequeños detalles los que marcan la gran diferencia, por eso la atención a cada etapa del proceso es imprescindible. Desde el bistec de ternera cuidadosamente seleccionado hasta nuestra deliciosa salsa de francesinha, la francesinha duforno® es simplemente irresistible.',
+      ],
+    };
+
+    const FRANCESINHA_DUFORNO_INGREDIENTES = [
+      { foto: 'https://duforno.com/wp-content/uploads/2021/12/carne-novilho-740x740.jpg', nome: { pt: 'Bife novilho', en: 'Beef steak', fr: 'Steak de bœuf', es: 'Bistec de ternera' } },
+      { foto: 'https://duforno.com/wp-content/uploads/2021/12/duforno-fiambre-740x740.jpg', nome: { pt: 'Fiambre', en: 'Ham', fr: 'Jambon', es: 'Jamón' } },
+      { foto: 'https://duforno.com/wp-content/uploads/2021/12/duforno-salsicha-fresca-740x740.jpg', nome: { pt: 'Salsicha fresca', en: 'Fresh sausage', fr: 'Saucisse fraîche', es: 'Salchicha fresca' } },
+      { foto: 'https://duforno.com/wp-content/uploads/2021/12/duforno-linguica-740x740.jpg', nome: { pt: 'Linguiça', en: 'Linguiça sausage', fr: 'Linguiça', es: 'Linguiça' } },
+      { foto: 'https://duforno.com/wp-content/uploads/2021/12/queijo-gouda-740x740.jpg', nome: { pt: 'Queijo gouda', en: 'Gouda cheese', fr: 'Fromage gouda', es: 'Queso gouda' } },
+      { foto: 'https://duforno.com/wp-content/uploads/2021/12/ovo-740x740.jpg', nome: { pt: 'Ovo', en: 'Egg', fr: 'Œuf', es: 'Huevo' } },
+      { foto: 'https://duforno.com/wp-content/uploads/2021/12/batatas-740x740.jpg', nome: { pt: 'Batata', en: 'Potato', fr: 'Pomme de terre', es: 'Patata' } },
+      { foto: 'https://duforno.com/wp-content/uploads/2021/12/molho-francesinha-740x740.jpg', nome: { pt: 'Molho francesinha', en: 'Francesinha gravy', fr: 'Sauce francesinha', es: 'Salsa de francesinha' } },
+    ];
+
+    const TOSTA_MISTA_DUFORNO_DESC_MODAL = {
+      pt: [
+        'Haverá forma mais divertida de comer uma tosta mista?',
+        'Com a mistura de queijos cheddar e gouda, a tosta mista duforno® é coberta com molho de francesinha e acompanhada com as nossas batatas.',
+      ],
+      en: [
+        'Is there a more fun way to enjoy a cheese and ham toastie?',
+        'With a blend of cheddar and gouda cheeses, the tosta mista duforno® is topped with francesinha gravy and served with our crispy chips.',
+      ],
+      fr: [
+        'Existe-t-il une façon plus amusante de déguster un croque-monsieur ?',
+        'Avec un mélange de fromages cheddar et gouda, la tosta mista duforno® est nappée de sauce francesinha et accompagnée de nos frites croustillantes.',
+      ],
+      es: [
+        '¿Hay una forma más divertida de disfrutar de un sándwich mixto?',
+        'Con una mezcla de quesos cheddar y gouda, la tosta mista duforno® se cubre con salsa de francesinha y se acompaña de nuestras patatas crujientes.',
+      ],
+    };
+
+    const TOSTA_MISTA_DUFORNO_INGREDIENTES = [
+      { foto: 'https://duforno.com/wp-content/uploads/2021/12/duforno-pao-saloio-740x740.jpg', nome: { pt: 'Pão saloio', en: 'Saloio bread', fr: 'Pain saloio', es: 'Pan saloio' } },
+      { foto: 'https://duforno.com/wp-content/uploads/2021/12/duforno-fiambre-740x740.jpg', nome: { pt: 'Fiambre', en: 'Ham', fr: 'Jambon', es: 'Jamón' } },
+      { foto: 'https://duforno.com/wp-content/uploads/2021/12/duforno-queijo-cheddar-740x740.jpg', nome: { pt: 'Queijo cheddar', en: 'Cheddar cheese', fr: 'Fromage cheddar', es: 'Queso cheddar' } },
+      { foto: 'https://duforno.com/wp-content/uploads/2021/12/queijo-gouda-740x740.jpg', nome: { pt: 'Queijo gouda', en: 'Gouda cheese', fr: 'Fromage gouda', es: 'Queso gouda' } },
+      { foto: 'https://duforno.com/wp-content/uploads/2021/12/batatas-740x740.jpg', nome: { pt: 'Batata', en: 'Potato', fr: 'Pomme de terre', es: 'Patata' } },
+      { foto: 'https://duforno.com/wp-content/uploads/2021/12/molho-francesinha-740x740.jpg', nome: { pt: 'Molho francesinha', en: 'Francesinha gravy', fr: 'Sauce francesinha', es: 'Salsa de francesinha' } },
+    ];
+
+    const CACHORRO_DUFORNO_DESC_MODAL = {
+      pt: [
+        'Se um cachorro duforno® já é bom, com molho de francesinha ainda é melhor!',
+        'A cebola crocante com bacon, a mistura do queijo cheddar e gouda, aliadas ao sabor do molho, são uma autêntica explosão de sabores que não vai querer perder.',
+      ],
+      en: [
+        'If a duforno® hotdog is already good, with francesinha gravy it gets even better!',
+        'The crispy onion with bacon, the blend of cheddar and gouda cheese, together with the flavour of the gravy, are a true explosion of flavours you will not want to miss.',
+      ],
+      fr: [
+        'Si un hot-dog duforno® est déjà bon, avec la sauce francesinha il devient encore meilleur !',
+        "Les oignons croustillants au bacon, le mélange de fromages cheddar et gouda, associés à la saveur de la sauce, sont une véritable explosion de saveurs que vous ne voudrez pas manquer.",
+      ],
+      es: [
+        '¡Si un hotdog duforno® ya es bueno, con salsa de francesinha es aún mejor!',
+        'La cebolla crujiente con beicon, la mezcla de queso cheddar y gouda, junto con el sabor de la salsa, son una auténtica explosión de sabores que no querrá perderse.',
+      ],
+    };
+
+    const CACHORRO_DUFORNO_INGREDIENTES = [
+      { foto: 'https://duforno.com/wp-content/uploads/2021/12/duforno-salsicha-viena-740x740.jpg', nome: { pt: 'Salsicha viena', en: 'Vienna sausage', fr: 'Saucisse de Vienne', es: 'Salchicha vienesa' } },
+      { foto: 'https://duforno.com/wp-content/uploads/2021/12/duforno-fiambre-740x740.jpg', nome: { pt: 'Fiambre', en: 'Ham', fr: 'Jambon', es: 'Jamón' } },
+      { foto: 'https://duforno.com/wp-content/uploads/2021/12/duforno-cebola-crocante-740x740.jpg', nome: { pt: 'Cebola crocante', en: 'Crispy onion', fr: 'Oignons croustillants', es: 'Cebolla crujiente' } },
+      { foto: 'https://duforno.com/wp-content/uploads/2021/12/bacon-740x740.jpg', nome: { pt: 'Bacon', en: 'Bacon', fr: 'Bacon', es: 'Beicon' } },
+      { foto: 'https://duforno.com/wp-content/uploads/2021/12/duforno-queijo-cheddar-740x740.jpg', nome: { pt: 'Queijo cheddar', en: 'Cheddar cheese', fr: 'Fromage cheddar', es: 'Queso cheddar' } },
+      { foto: 'https://duforno.com/wp-content/uploads/2021/12/queijo-gouda-740x740.jpg', nome: { pt: 'Queijo gouda', en: 'Gouda cheese', fr: 'Fromage gouda', es: 'Queso gouda' } },
+      { foto: 'https://duforno.com/wp-content/uploads/2021/12/batatas-740x740.jpg', nome: { pt: 'Batata', en: 'Potato', fr: 'Pomme de terre', es: 'Patata' } },
+      { foto: 'https://duforno.com/wp-content/uploads/2021/12/molho-francesinha-740x740.jpg', nome: { pt: 'Molho francesinha', en: 'Francesinha gravy', fr: 'Sauce francesinha', es: 'Salsa de francesinha' } },
+    ];
+
+    const BIFANA_DESC_MODAL = {
+      pt: [
+        'É impossível dizer Portugal, sem dizer bifana.',
+        'A combinação da bifana suculenta, em pão rústico, com um toque de mostarda, é realmente algo especial. E nada melhor que umas batatas crocantes para acompanhar. Como não incluir esta preciosidade no nosso menu?',
+      ],
+      en: [
+        "You can't say Portugal without saying bifana.",
+        "The combination of succulent bifana, in rustic bread, with a touch of mustard, is truly something special. And there's nothing better than some crispy chips to go with it. How could we not include this gem on our menu?",
+      ],
+      fr: [
+        'On ne peut pas dire Portugal sans dire bifana.',
+        "L'association de la bifana juteuse, dans un pain rustique, avec une touche de moutarde, est vraiment quelque chose de spécial. Et rien de meilleur que des frites croustillantes pour l'accompagner. Comment ne pas inclure ce trésor dans notre menu ?",
+      ],
+      es: [
+        'Es imposible decir Portugal sin decir bifana.',
+        'La combinación de la bifana jugosa, en pan rústico, con un toque de mostaza, es realmente algo especial. Y nada mejor que unas patatas crujientes para acompañar. ¿Cómo no incluir esta joya en nuestro menú?',
+      ],
+    };
+
+    const BIFANA_INGREDIENTES = [
+      { foto: 'https://duforno.com/wp-content/uploads/2021/12/bifanas-740x740.jpg', nome: { pt: 'Bifana de porco', en: 'Pork bifana', fr: 'Bifana de porc', es: 'Bifana de cerdo' } },
+      { foto: 'https://duforno.com/wp-content/uploads/2021/12/duforno-pao-rustico-740x740.jpg', nome: { pt: 'Pão rústico', en: 'Rustic bread', fr: 'Pain rustique', es: 'Pan rústico' } },
+      { foto: 'https://duforno.com/wp-content/uploads/2021/12/duforno-mostarda-740x740.jpg', nome: { pt: 'Mostarda', en: 'Mustard', fr: 'Moutarde', es: 'Mostaza' } },
+      { foto: 'https://duforno.com/wp-content/uploads/2021/12/batatas-740x740.jpg', nome: { pt: 'Batata', en: 'Potato', fr: 'Pomme de terre', es: 'Patata' } },
+    ];
+
+    const PREGO_NO_PAO_DESC_MODAL = {
+      pt: [
+        'Há quem diga que no pão, o prego tem mais identidade!',
+        "O bife de novilho com o fiambre, pincelado com manteiga d'alho, é algo tão caraterístico, que nos fica na memória.",
+      ],
+      en: [
+        'Some say that on bread, the steak roll has even more character!',
+        'The beef steak with ham, brushed with garlic butter, is something so distinctive that it stays in our memory.',
+      ],
+      fr: [
+        'Certains disent que sur le pain, le prego a encore plus de caractère !',
+        "Le steak de bœuf avec le jambon, badigeonné de beurre à l'ail, est quelque chose de si caractéristique qu'il reste dans notre mémoire.",
+      ],
+      es: [
+        'Hay quien dice que en el pan, el prego tiene más identidad.',
+        'El bistec de ternera con el jamón, pincelado con mantequilla de ajo, es algo tan característico que se nos queda en la memoria.',
+      ],
+    };
+
+    const PREGO_NO_PAO_INGREDIENTES = [
+      { foto: 'https://duforno.com/wp-content/uploads/2021/12/duforno-pao-rustico-740x740.jpg', nome: { pt: 'Pão rústico', en: 'Rustic bread', fr: 'Pain rustique', es: 'Pan rústico' } },
+      { foto: 'https://duforno.com/wp-content/uploads/2021/12/carne-novilho-740x740.jpg', nome: { pt: 'Bife novilho', en: 'Beef steak', fr: 'Steak de bœuf', es: 'Bistec de ternera' } },
+      { foto: 'https://duforno.com/wp-content/uploads/2021/12/duforno-manteiga-dalho-740x740.jpg', nome: { pt: "Manteiga d'alho", en: 'Garlic butter', fr: "Beurre à l'ail", es: 'Mantequilla de ajo' } },
+      { foto: 'https://duforno.com/wp-content/uploads/2021/12/duforno-fiambre-740x740.jpg', nome: { pt: 'Fiambre', en: 'Ham', fr: 'Jambon', es: 'Jamón' } },
+    ];
+
+    const CATEGORIAS = [
+      {
+        id: 'destaques',
+        tipo: 'fotos',
+        nome: { pt: 'Destaques', en: 'Highlights', fr: 'Coups de cœur', es: 'Destacados' },
+        descricao: {
+          pt: 'Os pratos mais pedidos da casa.',
+          en: "The house's most popular dishes.",
+          fr: 'Les plats les plus demandés de la maison.',
+          es: 'Los platos más pedidos de la casa.',
+        },
+        items: [
+          {
+            foto: 'imagens/web/francesinha-duforno.jpg',
+            nome: { pt: 'Francesinha duforno®', en: 'Francesinha duforno®', fr: 'Francesinha duforno®', es: 'Francesinha duforno®' },
+            preco: '13,45 €',
+            desc: {
+              pt: 'Bife de novilho, fiambre, salsicha e linguiça frescas, queijo gouda, ovo, batata e molho de francesinha.',
+              en: 'Beef steak, ham, fresh sausage and linguiça, gouda cheese, egg, chips and francesinha gravy.',
+              fr: 'Steak de bœuf, jambon, saucisse et linguiça fraîches, fromage gouda, œuf, frites et sauce francesinha.',
+              es: 'Bistec de ternera, jamón, salchicha y linguiça frescas, queso gouda, huevo, patatas fritas y salsa de francesinha.',
+            },
+            descModal: FRANCESINHA_DUFORNO_DESC_MODAL,
+            ingredientesFotos: FRANCESINHA_DUFORNO_INGREDIENTES,
+          },
+          {
+            foto: 'imagens/web/cachorro-duforno.jpg',
+            nome: { pt: 'Cachorro duforno®', en: 'Cachorro duforno®', fr: 'Cachorro duforno®', es: 'Cachorro duforno®' },
+            preco: '10,95 €',
+            desc: {
+              pt: 'Salsicha viena, fiambre, cebola crocante com bacon, queijo cheddar e gouda, batata e molho de francesinha.',
+              en: 'Vienna sausage, ham, crispy onion with bacon, cheddar and gouda cheese, chips and francesinha gravy.',
+              fr: 'Saucisse de Vienne, jambon, oignons croustillants au bacon, fromages cheddar et gouda, frites et sauce francesinha.',
+              es: 'Salchicha vienesa, jamón, cebolla crujiente con beicon, quesos cheddar y gouda, patatas fritas y salsa de francesinha.',
+            },
+            descModal: CACHORRO_DUFORNO_DESC_MODAL,
+            ingredientesFotos: CACHORRO_DUFORNO_INGREDIENTES,
+          },
+          {
+            foto: 'imagens/web/tosta-de-frango.jpg',
+            nome: { pt: 'Tosta de frango', en: 'Chicken toast', fr: 'Toast au poulet', es: 'Tostada de pollo' },
+            preco: '9,95 €',
+            desc: {
+              pt: "Pão saloio com manteiga d'alho, bife de frango, bacon, tomate cherry, rúcula, queijo cheddar, ovo, batata e molho.",
+              en: 'Saloio bread with garlic butter, grilled chicken, bacon, cherry tomato, rocket, cheddar, egg, chips and sauce.',
+              fr: "Pain saloio au beurre à l'ail, escalope de poulet, bacon, tomate cerise, roquette, cheddar, œuf, frites et sauce.",
+              es: 'Pan saloio con mantequilla de ajo, filete de pollo, beicon, tomate cherry, rúcula, queso cheddar, huevo, patatas fritas y salsa.',
+            },
+          },
+          {
+            foto: 'imagens/web/prego-no-pao.jpg',
+            nome: { pt: 'Prego no pão', en: 'Steak roll', fr: 'Sandwich au steak', es: 'Bocadillo de bistec' },
+            preco: '9,50 €',
+            desc: {
+              pt: "Pão rústico, bife de novilho com manteiga d'alho, fiambre, batata e molho.",
+              en: 'Rustic bread, beef steak with garlic butter, ham, chips and sauce.',
+              fr: "Pain rustique, steak de bœuf au beurre à l'ail, jambon, frites et sauce.",
+              es: 'Pan rústico, bistec de ternera con mantequilla de ajo, jamón, patatas fritas y salsa.',
+            },
+            descModal: PREGO_NO_PAO_DESC_MODAL,
+            ingredientesFotos: PREGO_NO_PAO_INGREDIENTES,
+          },
+          {
+            foto: 'imagens/web/bifana.jpg',
+            nome: { pt: 'Bifana', en: 'Bifana', fr: 'Bifana', es: 'Bifana' },
+            preco: '7,70 €',
+            desc: {
+              pt: 'Bifana em pão rústico, mostarda, batata e molho.',
+              en: 'Pork loin in rustic bread, mustard, chips and sauce.',
+              fr: 'Filet de porc mariné dans un pain rustique, moutarde, frites et sauce.',
+              es: 'Lomo de cerdo en pan rústico, mostaza, patatas fritas y salsa.',
+            },
+            descModal: BIFANA_DESC_MODAL,
+            ingredientesFotos: BIFANA_INGREDIENTES,
+          },
+          {
+            nome: { pt: 'Mousse de chocolate', en: 'Chocolate mousse', fr: 'Mousse au chocolat', es: 'Mousse de chocolate' },
+            foto: 'imagens/web/mousse-chocolate.png',
+            preco: '3,70 €',
+            desc: {
+              pt: 'Receita caseira com chocolate preto nacional 70% cacau.',
+              en: 'Homemade recipe with 70% Portuguese dark chocolate.',
+              fr: 'Recette maison au chocolat noir portugais 70% cacao.',
+              es: 'Receta casera con chocolate negro nacional 70% cacao.',
+            },
+          },
+        ],
+      },
+      {
+        id: 'novidades',
+        tipo: 'lista',
+        nome: { pt: 'Novidades', en: "What's New", fr: 'Nouveautés', es: 'Novedades' },
+        descricao: {
+          pt: 'As últimas criações duforno®, direto do forno para si.',
+          en: 'The latest duforno® creations, straight from the oven to you.',
+          fr: 'Les dernières créations duforno®, tout droit sorties du four.',
+          es: 'Las últimas creaciones duforno®, directamente del horno para usted.',
+        },
+        items: [
+          {
+            nome: { pt: 'Tosta Italiana', en: 'Tosta Italiana', fr: 'Tosta Italiana', es: 'Tosta Italiana' },
+            foto: 'imagens/web/tosta-italiana.jpg',
+            badge: 'novo',
+            preco: '9,95 €',
+            desc: {
+              pt: 'Pão Saloio com azeite, pesto fresco, burrata, tomate cherry, vinagre balsâmico e batata ou salada.',
+              en: 'Saloio bread, olive oil, fresh pesto, burrata cheese, cherry tomatoes, balsamic vinegar, and chips or salad.',
+              fr: "Pain saloio à l'huile d'olive, pesto frais, burrata, tomates cerises, vinaigre balsamique, et frites ou salade.",
+              es: 'Pan saloio con aceite de oliva, pesto fresco, burrata, tomate cherry, vinagre balsámico y patatas fritas o ensalada.',
+            },
+          },
+          {
+            nome: { pt: 'Tosta Portuguesa', en: 'Tosta Portuguesa', fr: 'Tosta Portuguesa', es: 'Tosta Portuguesa' },
+            foto: 'imagens/web/tosta-portuguesa.jpg',
+            badge: 'novo',
+            preco: '9,95 €',
+            desc: {
+              pt: 'Pão Saloio com azeite, rúcula, alheira grelhada, molho agridoce, ovo, orégãos e batata ou salada.',
+              en: 'Saloio bread with olive oil, arugula, grilled alheira sausage, sweet and sour sauce, egg, oregano, and chips or salad.',
+              fr: "Pain saloio à l'huile d'olive, roquette, saucisse alheira grillée, sauce aigre-douce, œuf, origan, et frites ou salade.",
+              es: 'Pan saloio con aceite de oliva, rúcula, alheira (embutido) a la plancha, salsa agridulce, huevo, orégano y patatas fritas o ensalada.',
+            },
+          },
+          {
+            nome: { pt: 'Tosta Ibérica', en: 'Tosta Ibérica', fr: 'Tosta Ibérica', es: 'Tosta Ibérica' },
+            foto: 'imagens/web/tosta-iberica.jpg',
+            badge: 'novo',
+            preco: '11,95 €',
+            desc: {
+              pt: 'Pão Saloio com azeite, burrata, rúcula, bife, presunto, vinagre balsâmico e batata ou salada.',
+              en: 'Saloio bread with olive oil, burrata, arugula, steak, ham, balsamic vinegar, and chips or salad.',
+              fr: "Pain saloio à l'huile d'olive, burrata, roquette, steak, jambon ibérique, vinaigre balsamique, et frites ou salade.",
+              es: 'Pan saloio con aceite de oliva, burrata, rúcula, bistec, jamón ibérico, vinagre balsámico y patatas fritas o ensalada.',
+            },
+          },
+          {
+            nome: { pt: 'Francesinha de Bifana', en: 'Francesinha de Bifana', fr: 'Francesinha de Bifana', es: 'Francesinha de Bifana' },
+            foto: 'imagens/web/francesinha-de-bifana.jpg',
+            badge: 'novo',
+            preco: '11,70 €',
+            desc: {
+              pt: 'Bifana em pão rústico, linguiça fresca, queijo gouda, batata e molho de francesinha.',
+              en: 'Pork bifana in rustic bread with fresh linguiça sausage, gouda cheese, chips and francesinha gravy.',
+              fr: 'Bifana dans un pain rustique, linguiça fraîche, fromage gouda, frites et sauce francesinha.',
+              es: 'Bifana en pan rústico, linguiça fresca, queso gouda, patatas fritas y salsa de francesinha.',
+            },
+          },
+          {
+            nome: { pt: 'Francesinha Saloia', en: 'Francesinha Saloia', fr: 'Francesinha Saloia', es: 'Francesinha Saloia' },
+            foto: 'imagens/web/francesinha-saloia.jpg',
+            badge: 'novo',
+            preco: '15,45 €',
+            desc: {
+              pt: 'Pão Saloio, bife de novilho, fiambre, salsicha e linguiça frescas, queijo gouda, ovo, batata e molho de francesinha.',
+              en: 'Saloio bread with beef steak, ham, fresh sausage and linguiça, gouda cheese, egg, chips and francesinha gravy.',
+              fr: 'Pain saloio, steak de bœuf, jambon, saucisse et linguiça fraîches, fromage gouda, œuf, frites et sauce francesinha.',
+              es: 'Pan saloio, bistec de ternera, jamón, salchicha y linguiça frescas, queso gouda, huevo, patatas fritas y salsa de francesinha.',
+            },
+          },
+        ],
+      },
+      {
+        id: 'para-prato',
+        tipo: 'lista',
+        nome: { pt: 'Para o Prato', en: 'On the Plate', fr: "À l'assiette", es: 'En el Plato' },
+        descricao: {
+          pt: 'Servidas diretamente no prato, com batata e molho de francesinha.',
+          en: 'Served straight on the plate, with chips and francesinha gravy.',
+          fr: 'Servies directement dans l’assiette, avec frites et sauce francesinha.',
+          es: 'Servidas directamente en el plato, con patatas fritas y salsa de francesinha.',
+        },
+        items: [
+          {
+            nome: { pt: 'Francesinha duforno®', en: 'Francesinha duforno®', fr: 'Francesinha duforno®', es: 'Francesinha duforno®' },
+            foto: 'imagens/web/francesinha-duforno.jpg',
+            preco: '13,45 €',
+            desc: {
+              pt: 'Bife de novilho, fiambre, salsicha e linguiça frescas, queijo gouda, ovo, batata e molho de francesinha.',
+              en: 'Beef steak, ham, fresh sausage and linguiça, gouda cheese, egg, chips and francesinha gravy.',
+              fr: 'Steak de bœuf, jambon, saucisse et linguiça fraîches, fromage gouda, œuf, frites et sauce francesinha.',
+              es: 'Bistec de ternera, jamón, salchicha y linguiça frescas, queso gouda, huevo, patatas fritas y salsa de francesinha.',
+            },
+            descModal: FRANCESINHA_DUFORNO_DESC_MODAL,
+            ingredientesFotos: FRANCESINHA_DUFORNO_INGREDIENTES,
+          },
+          {
+            nome: {
+              pt: 'Francesinha de frango', en: 'Francesinha de frango | Chicken francesinha',
+              fr: 'Francesinha de frango | Francesinha au poulet', es: 'Francesinha de frango | Francesinha de pollo',
+            },
+            foto: 'imagens/web/francesinha-de-frango.jpg',
+            preco: '11,70 €',
+            desc: {
+              pt: 'Bife de frango, fiambre, linguiça fresca, bacon, queijo gouda, ovo, batata e molho de francesinha.',
+              en: 'Grilled chicken, ham, fresh linguiça sausage, bacon, gouda cheese, egg, chips and francesinha gravy.',
+              fr: 'Poulet grillé, jambon, linguiça fraîche, bacon, fromage gouda, œuf, frites et sauce francesinha.',
+              es: 'Pollo a la plancha, jamón, linguiça fresca, beicon, queso gouda, huevo, patatas fritas y salsa de francesinha.',
+            },
+          },
+          {
+            nome: { pt: 'Francesinha', en: 'Francesinha', fr: 'Francesinha', es: 'Francesinha' },
+            preco: '11,45 €',
+            desc: {
+              pt: 'Bife de novilho, fiambre, salsicha e linguiça frescas, queijo gouda e molho de francesinha.',
+              en: 'Beef steak, ham, fresh sausage and linguiça, gouda cheese and francesinha gravy.',
+              fr: 'Steak de bœuf, jambon, saucisse et linguiça fraîches, fromage gouda et sauce francesinha.',
+              es: 'Bistec de ternera, jamón, salchicha y linguiça frescas, queso gouda y salsa de francesinha.',
+            },
+          },
+          {
+            nome: {
+              pt: 'Cachorro duforno®', en: "Cachorro duforno® | duforno®'s special hotdog",
+              fr: 'Cachorro duforno® | Le hot-dog signature duforno®', es: 'Cachorro duforno® | El hotdog especial duforno®',
+            },
+            foto: 'imagens/web/cachorro-duforno.jpg',
+            preco: '10,95 €',
+            descModal: CACHORRO_DUFORNO_DESC_MODAL,
+            ingredientesFotos: CACHORRO_DUFORNO_INGREDIENTES,
+            desc: {
+              pt: 'Salsicha viena, fiambre, cebola crocante com bacon, queijo cheddar e gouda, batata e molho de francesinha.',
+              en: 'Vienna sausage, ham, crispy onion with bacon, cheddar and gouda cheese, chips and francesinha gravy.',
+              fr: 'Saucisse de Vienne, jambon, oignons croustillants au bacon, fromages cheddar et gouda, frites et sauce francesinha.',
+              es: 'Salchicha vienesa, jamón, cebolla crujiente con beicon, quesos cheddar y gouda, patatas fritas y salsa de francesinha.',
+            },
+          },
+          {
+            nome: {
+              pt: 'Tosta mista duforno®', en: "Tosta mista duforno® | duforno®'s special cheese and ham toast",
+              fr: 'Tosta mista duforno® | Le croque-monsieur signature duforno®', es: 'Tosta mista duforno® | El sándwich mixto especial duforno®',
+            },
+            foto: 'imagens/web/tosta-mista-duforno.png',
+            preco: '9,35 €',
+            desc: {
+              pt: 'Pão Saloio, fiambre, queijo cheddar e gouda, batata e molho de francesinha.',
+              en: 'Saloio bread, cheddar and gouda cheese, francesinha gravy and chips.',
+              fr: 'Pain saloio, fromages cheddar et gouda, frites et sauce francesinha.',
+              es: 'Pan saloio, quesos cheddar y gouda, patatas fritas y salsa de francesinha.',
+            },
+            descModal: TOSTA_MISTA_DUFORNO_DESC_MODAL,
+            ingredientesFotos: TOSTA_MISTA_DUFORNO_INGREDIENTES,
+          },
+        ],
+      },
+      {
+        id: 'para-pao',
+        tipo: 'lista',
+        nome: { pt: 'Para o Pão', en: 'On Bread', fr: 'Sur Pain', es: 'En Pan' },
+        descricao: {
+          pt: "Servidas em pão rústico ou pão saloio com manteiga d'alho.",
+          en: 'Served in rustic bread or saloio bread with garlic butter.',
+          fr: "Servies dans un pain rustique ou pain saloio avec beurre à l'ail.",
+          es: 'Servidas en pan rústico o pan saloio con mantequilla de ajo.',
+        },
+        items: [
+          {
+            nome: { pt: 'Tosta de frango', en: 'Tosta de frango | Chicken toast', fr: 'Tosta de frango | Toast au poulet', es: 'Tosta de frango | Tostada de pollo' },
+            foto: 'imagens/web/tosta-de-frango.jpg',
+            preco: '9,95 €',
+            desc: {
+              pt: "Pão saloio com manteiga d'alho, bife de frango, bacon, tomate cherry, rúcula, queijo cheddar, ovo, mistura de sementes e orégãos, batata e molho.",
+              en: 'Saloio bread with garlic butter, grilled chicken, bacon, cherry tomato, wild rucula, cheddar, egg, seed mix, oregano, chips and sauce.',
+              fr: "Pain saloio au beurre à l'ail, escalope de poulet, bacon, tomate cerise, roquette sauvage, cheddar, œuf, mélange de graines, origan, frites et sauce.",
+              es: 'Pan saloio con mantequilla de ajo, filete de pollo, beicon, tomate cherry, rúcula silvestre, queso cheddar, huevo, mezcla de semillas, orégano, patatas fritas y salsa.',
+            },
+          },
+          {
+            nome: { pt: 'Cachorro', en: 'Cachorro | Hotdog', fr: 'Cachorro | Hot-dog', es: 'Cachorro | Perrito caliente' },
+            foto: 'imagens/web/cachorro.jpg',
+            preco: '9,90 €',
+            desc: {
+              pt: 'Salsicha viena, fiambre, cebola crocante com bacon, queijo cheddar e gouda, batata e molho.',
+              en: 'Viena sausage, ham, crunchy onion with bacon, cheddar and gouda cheese, chips and sauce.',
+              fr: 'Saucisse de Vienne, jambon, oignons croustillants au bacon, fromages cheddar et gouda, frites et sauce.',
+              es: 'Salchicha vienesa, jamón, cebolla crujiente con beicon, quesos cheddar y gouda, patatas fritas y salsa.',
+            },
+          },
+          {
+            nome: { pt: 'Prego no pão', en: 'Prego no pão | Steak roll', fr: 'Prego no pão | Sandwich au steak', es: 'Prego no pão | Bocadillo de bistec' },
+            foto: 'imagens/web/prego-no-pao.jpg',
+            preco: '9,50 €',
+            descModal: PREGO_NO_PAO_DESC_MODAL,
+            ingredientesFotos: PREGO_NO_PAO_INGREDIENTES,
+            desc: {
+              pt: "Pão rústico, bife de novilho com manteiga d'alho, fiambre, batata e molho.",
+              en: 'Rustic bread, beef with garlic butter, ham, chips and sauce.',
+              fr: "Pain rustique, steak de bœuf au beurre à l'ail, jambon, frites et sauce.",
+              es: 'Pan rústico, bistec de ternera con mantequilla de ajo, jamón, patatas fritas y salsa.',
+            },
+          },
+          {
+            nome: { pt: 'Tosta de guacamole e bacon', en: 'Tosta de guacamole e bacon | Bacon and guacamole toast', fr: 'Tosta de guacamole e bacon | Toast au guacamole et bacon', es: 'Tosta de guacamole e bacon | Tostada de guacamole y beicon' },
+            foto: 'imagens/web/tosta-guacamole-bacon.jpg',
+            preco: '8,95 €',
+            desc: {
+              pt: 'Pão saloio, guacamole, rúcula, tomate cherry, queijo cheddar, ovo, bacon, mistura de sementes e orégãos.',
+              en: 'Saloio bread, guacamole, arugula, cherry tomato, cheddar cheese, egg, bacon, seed mix and oregano.',
+              fr: 'Pain saloio, guacamole, roquette, tomate cerise, cheddar, œuf, bacon, mélange de graines et origan.',
+              es: 'Pan saloio, guacamole, rúcula, tomate cherry, queso cheddar, huevo, beicon, mezcla de semillas y orégano.',
+            },
+          },
+          {
+            nome: { pt: 'Bifana', en: 'Bifana | Special pork loin roll', fr: 'Bifana | Sandwich de porc mariné', es: 'Bifana | Bocadillo especial de lomo de cerdo' },
+            foto: 'imagens/web/bifana.jpg',
+            preco: '7,70 €',
+            descModal: BIFANA_DESC_MODAL,
+            ingredientesFotos: BIFANA_INGREDIENTES,
+            desc: {
+              pt: 'Bifana em pão rústico, mostarda, batata e molho.',
+              en: 'Rustic bread roll with pork, mustard, chips and sauce.',
+              fr: 'Filet de porc mariné dans un pain rustique, moutarde, frites et sauce.',
+              es: 'Lomo de cerdo en pan rústico, mostaza, patatas fritas y salsa.',
+            },
+          },
+          {
+            nome: { pt: 'Tosta de tomate e queijo', en: 'Tosta de tomate e queijo | Tomato and cheese toast', fr: 'Tosta de tomate e queijo | Toast tomate et fromage', es: 'Tosta de tomate e queijo | Tostada de tomate y queso' },
+            foto: 'imagens/web/tosta-tomate-queijo.png',
+            preco: '6,90 €',
+            desc: {
+              pt: "Pão saloio com manteiga d'alho, queijo cheddar, tomate cherry, mistura de sementes e orégãos, batata e molho.",
+              en: 'Saloio bread with garlic butter, cheddar cheese, cherry tomato, seed mix and oregano, chips and sauce.',
+              fr: "Pain saloio au beurre à l'ail, cheddar, tomate cerise, mélange de graines et origan, frites et sauce.",
+              es: 'Pan saloio con mantequilla de ajo, queso cheddar, tomate cherry, mezcla de semillas y orégano, patatas fritas y salsa.',
+            },
+          },
+        ],
+      },
+      {
+        id: 'vegetarianos',
+        tipo: 'lista',
+        nome: { pt: 'Para Vegetarianos', en: 'For Vegetarians', fr: 'Pour Végétariens', es: 'Para Vegetarianos' },
+        descricao: {
+          pt: 'Opções vegetarianas e veganas, com o mesmo sabor de sempre.',
+          en: 'Vegetarian and vegan options, with all the same flavour.',
+          fr: 'Options végétariennes et véganes, avec toujours autant de saveur.',
+          es: 'Opciones vegetarianas y veganas, con el mismo sabor de siempre.',
+        },
+        items: [
+          {
+            nome: { pt: 'Tosta de guacamole e tomate', en: 'Tosta de guacamole e tomate | Guacamole and tomato toast', fr: 'Tosta de guacamole e tomate | Toast au guacamole et tomate', es: 'Tosta de guacamole e tomate | Tostada de guacamole y tomate' },
+            foto: 'imagens/web/tosta-guacamole-tomate.jpg',
+            badge: 'vegetariano',
+            preco: '7,95 €',
+            desc: {
+              pt: 'Pão saloio com molho pesto, guacamole, tomate cherry, mistura de sementes, batata e molho.',
+              en: 'Saloio bread with pesto sauce, guacamole, cherry tomato, seed mix, chips and sauce.',
+              fr: 'Pain saloio à la sauce pesto, guacamole, tomate cerise, mélange de graines, frites et sauce.',
+              es: 'Pan saloio con salsa pesto, guacamole, tomate cherry, mezcla de semillas, patatas fritas y salsa.',
+            },
+          },
+          {
+            nome: { pt: 'Francesinha vegetariana duforno®', en: 'Francesinha vegetariana duforno®', fr: 'Francesinha végétarienne duforno®', es: 'Francesinha vegetariana duforno®' },
+            foto: 'imagens/web/francesinha-vegetariana.jpg',
+            badge: 'vegan',
+            preco: '14,95 €',
+            desc: {
+              pt: 'Sensational Garden Gourmet, salsicha e chouriço vegan, queijo Violife vegan, molho de francesinha vegan e batata frita.',
+              en: 'Sensational Garden Gourmet, vegan sausage and vegan chorizo, Violife vegan cheese, vegan francesinha sauce and french fries.',
+              fr: 'Sensational Garden Gourmet, saucisse et chorizo vegan, fromage vegan Violife, sauce francesinha vegan et frites.',
+              es: 'Sensational Garden Gourmet, salchicha y chorizo vegano, queso vegano Violife, salsa de francesinha vegana y patatas fritas.',
+            },
+          },
+        ],
+      },
+      {
+        id: 'mais-novos',
+        tipo: 'lista',
+        nome: { pt: 'Para os Mais Novos', en: 'For the Little Ones', fr: 'Pour les Plus Petits', es: 'Para los Más Pequeños' },
+        descricao: {
+          pt: 'Pensadas especialmente para os mais pequenos.',
+          en: 'Specially designed for children.',
+          fr: 'Spécialement pensées pour les plus petits.',
+          es: 'Pensadas especialmente para los más pequeños.',
+        },
+        items: [
+          {
+            nome: { pt: 'Mini francesinha', en: 'Mini francesinha', fr: 'Mini francesinha', es: 'Mini francesinha' },
+            preco: '9,70 €',
+            desc: {
+              pt: 'Bife de novilho, fiambre, queijo gouda, batata e molho de francesinha.',
+              en: 'Beef, ham, gouda cheese, chips and traditional francesinha gravy.',
+              fr: 'Steak de bœuf, jambon, fromage gouda, frites et sauce francesinha traditionnelle.',
+              es: 'Bistec de ternera, jamón, queso gouda, patatas fritas y salsa de francesinha tradicional.',
+            },
+          },
+          {
+            nome: { pt: 'Escolha do mini chefe', en: "Mini Chef's Choice", fr: 'Le choix du mini-chef', es: 'La elección del mini chef' },
+            preco: '7,50 €',
+            desc: {
+              pt: 'Escolha entre bife de novilho grelhado, frango grelhado ou salsicha viena grelhada, servido com queijo cheddar, tomate cherry, batata frita e molho.',
+              en: 'Choose between beef, grilled chicken or viena sausage, served with cheddar, cherry tomato, chips and sauce.',
+              fr: 'Choisissez entre bœuf grillé, poulet grillé ou saucisse de Vienne grillée, servi avec cheddar, tomate cerise, frites et sauce.',
+              es: 'Elija entre bistec a la plancha, pollo a la plancha o salchicha vienesa a la plancha, servido con queso cheddar, tomate cherry, patatas fritas y salsa.',
+            },
+          },
+          {
+            nome: { pt: 'Sopa do dia', en: 'Special Soup', fr: 'Soupe du jour', es: 'Sopa del día' },
+            preco: '2,70 €',
+          },
+        ],
+      },
+      {
+        id: 'adocar',
+        tipo: 'lista',
+        nome: { pt: 'Para Adoçar', en: 'Something Sweet', fr: 'Pour les Gourmands', es: 'Para Endulzar' },
+        descricao: {
+          pt: 'Sobremesas caseiras, feitas no restaurante a partir de ingredientes frescos.',
+          en: 'Homemade desserts, made in-house from fresh ingredients.',
+          fr: 'Desserts maison, préparés au restaurant à partir d’ingrédients frais.',
+          es: 'Postres caseros, elaborados en el restaurante con ingredientes frescos.',
+        },
+        items: [
+          {
+            nome: { pt: 'Mousse de chocolate', en: 'Chocolate mousse', fr: 'Mousse au chocolat', es: 'Mousse de chocolate' },
+            foto: 'imagens/web/mousse-chocolate.png',
+            preco: '3,70 €',
+            desc: {
+              pt: 'Uma deliciosa receita caseira que junta o doce e o amargo, feita com chocolate preto nacional 70% cacau.',
+              en: 'A delicious homemade recipe that combines the sweet and the bitter, made with portuguese 70% cocoa dark chocolate.',
+              fr: 'Une délicieuse recette maison qui allie le sucré et l’amer, préparée avec du chocolat noir portugais à 70% de cacao.',
+              es: 'Una deliciosa receta casera que combina lo dulce y lo amargo, elaborada con chocolate negro nacional al 70% de cacao.',
+            },
+          },
+          {
+            nome: { pt: 'Leite creme', en: 'Leite creme | Crème brûlée', fr: 'Leite creme | Crème brûlée', es: 'Leite creme | Natillas quemadas' },
+            foto: 'imagens/web/leite-de-creme.jpg',
+            preco: '3,70 €',
+            desc: {
+              pt: 'Receita tradicional portuguesa, terminada na hora com açúcar caramelizado.',
+              en: 'Traditional Portuguese recipe freshly finished with caramelized sugar.',
+              fr: 'Recette traditionnelle portugaise, terminée minute avec du sucre caramélisé.',
+              es: 'Receta tradicional portuguesa, terminada al momento con azúcar caramelizado.',
+            },
+          },
+          {
+            nome: { pt: 'Salada de fruta', en: 'Fruit salad', fr: 'Salade de fruits', es: 'Ensalada de frutas' },
+            foto: 'imagens/web/salada-fruta.png',
+            preco: '2,90 €',
+          },
+        ],
+      },
+    ];
+
+    const BEBER = {
+      id: 'beber',
+      nome: { pt: 'Para Beber', en: 'To Drink', fr: 'À Boire', es: 'Para Beber' },
+      descricao: {
+        pt: 'Bebidas frias, cervejas e vinhos, além do café para terminar.',
+        en: 'Cold drinks, beers and wines, plus coffee to finish.',
+        fr: 'Boissons fraîches, bières et vins, ainsi que le café pour terminer.',
+        es: 'Bebidas frías, cervezas y vinos, además del café para terminar.',
+      },
+      grupos: [
+        {
+          titulo: { pt: 'Sem álcool', en: 'Alcohol free', fr: 'Sans alcool', es: 'Sin alcohol' },
+          items: [
+            { nome: { pt: 'Água 33cl', en: 'Water 33cl', fr: 'Eau 33cl', es: 'Agua 33cl' }, preco: '1,50 €' },
+            { nome: { pt: 'Água com gás', en: 'Sparkling water', fr: 'Eau gazeuse', es: 'Agua con gas' }, preco: '1,90 €' },
+            { nome: { pt: 'Limonada 30cl', en: 'Lemonade 30cl', fr: 'Citronnade 30cl', es: 'Limonada 30cl' }, preco: '1,90 €' },
+            { nome: { pt: 'Néctar', en: 'Nectar juice', fr: 'Nectar de fruits', es: 'Néctar de frutas' }, preco: '1,90 €' },
+            { nome: { pt: 'Refrigerante 30cl', en: 'Soft drink 30cl', fr: 'Soda 30cl', es: 'Refresco 30cl' }, preco: '2,00 €' },
+            { nome: { pt: 'Refrigerante 40cl', en: 'Soft drink 40cl', fr: 'Soda 40cl', es: 'Refresco 40cl' }, preco: '2,40 €' },
+            { nome: { pt: 'Refrigerante lata', en: 'Soft drink can', fr: 'Soda en canette', es: 'Refresco en lata' }, preco: '2,30 €' },
+          ],
+        },
+        {
+          titulo: { pt: 'Cervejas', en: 'Beer', fr: 'Bières', es: 'Cervezas' },
+          items: [
+            { nome: { pt: 'Cerveja de pressão 30cl', en: 'Draft beer 30cl', fr: 'Bière pression 30cl', es: 'Cerveza de barril 30cl' }, preco: '2,00 €' },
+            { nome: { pt: 'Cerveja de pressão 50cl', en: 'Draft beer 50cl', fr: 'Bière pression 50cl', es: 'Cerveza de barril 50cl' }, preco: '3,30 €' },
+            { nome: { pt: 'Mix 30cl', en: 'Mixed draft beer 30cl', fr: 'Panaché 30cl', es: 'Clara 30cl' }, preco: '2,00 €' },
+            { nome: { pt: 'Mix 50cl', en: 'Mixed draft beer 50cl', fr: 'Panaché 50cl', es: 'Clara 50cl' }, preco: '3,30 €' },
+            { nome: { pt: 'SuperBock sem álcool', en: 'Alcohol free beer', fr: 'SuperBock sans alcool', es: 'SuperBock sin alcohol' }, preco: '2,10 €' },
+            { nome: { pt: 'Somersby', en: 'Somersby cider', fr: 'Somersby', es: 'Somersby' }, preco: '3,10 €' },
+          ],
+        },
+        {
+          titulo: { pt: 'Vinhos', en: 'Wines', fr: 'Vins', es: 'Vinos' },
+          items: [
+            { nome: { pt: 'Vinho tinto 75cl', en: 'Red wine 75cl', fr: 'Vin rouge 75cl', es: 'Vino tinto 75cl' }, preco: '9,50 €' },
+            { nome: { pt: 'Vinho tinto 37,5cl', en: 'Red wine 37,5cl', fr: 'Vin rouge 37,5cl', es: 'Vino tinto 37,5cl' }, preco: '5,50 €' },
+            { nome: { pt: 'Vinho branco 75cl', en: 'White wine 75cl', fr: 'Vin blanc 75cl', es: 'Vino blanco 75cl' }, preco: '9,50 €' },
+            { nome: { pt: 'Vinho branco 37,5cl', en: 'White wine 37,5cl', fr: 'Vin blanc 37,5cl', es: 'Vino blanco 37,5cl' }, preco: '5,50 €' },
+            { nome: { pt: 'Vinho verde 75cl', en: 'Vinho verde 75cl (green wine)', fr: 'Vinho verde 75cl (vin vert)', es: 'Vinho verde 75cl (vino verde)' }, preco: '9,50 €' },
+            { nome: { pt: 'Vinho verde 37,5cl', en: 'Vinho verde 37,5cl (green wine)', fr: 'Vinho verde 37,5cl (vin vert)', es: 'Vinho verde 37,5cl (vino verde)' }, preco: '5,50 €' },
+          ],
+        },
+        {
+          titulo: { pt: 'Para Terminar', en: 'To Finish', fr: 'Pour Terminer', es: 'Para Terminar' },
+          items: [
+            { nome: { pt: 'Café', en: 'Espresso', fr: 'Café expresso', es: 'Café expreso' }, preco: '1,00 €' },
+            { nome: { pt: 'Descafeinado', en: 'Decaffeinated', fr: 'Décaféiné', es: 'Descafeinado' }, preco: '1,10 €' },
+            { nome: { pt: 'Pingo', en: 'Espresso with milk', fr: 'Pingo (café allongé au lait)', es: 'Pingo (café con un toque de leche)' }, preco: '1,00 €' },
+            { nome: { pt: 'Meia de leite', en: 'Coffee with milk', fr: 'Café au lait', es: 'Café con leche' }, preco: '1,60 €' },
+          ],
+        },
+      ],
+    };
+
+    const EXTRAS = {
+      id: 'adicionar',
+      nome: { pt: 'Para Adicionar', en: 'Extras', fr: 'Suppléments', es: 'Para Añadir' },
+      descricao: {
+        pt: 'Personalize o seu prato com estes extras.',
+        en: 'Customise your dish with these extras.',
+        fr: 'Personnalisez votre plat avec ces suppléments.',
+        es: 'Personalice su plato con estos extras.',
+      },
+      items: [
+        { nome: { pt: 'Molho de francesinha', en: 'Francesinha gravy', fr: 'Sauce francesinha', es: 'Salsa de francesinha' }, preco: '2,50 €' },
+        { nome: { pt: '1/2 Salada', en: '1/2 Salad', fr: '1/2 Salade', es: '1/2 Ensalada' }, preco: '2,50 €' },
+        { nome: { pt: 'Batata frita', en: 'Chips', fr: 'Frites', es: 'Patatas fritas' }, preco: '2,60 €' },
+        { nome: { pt: 'Ovo', en: 'Egg', fr: 'Œuf', es: 'Huevo' }, preco: '1,00 €' },
+        { nome: { pt: 'Salsicha viena', en: 'Vienna sausage', fr: 'Saucisse de Vienne', es: 'Salchicha vienesa' }, preco: '3,00 €' },
+        { nome: { pt: 'Salsicha fresca', en: 'Fresh sausage', fr: 'Saucisse fraîche', es: 'Salchicha fresca' }, preco: '0,70 €' },
+        { nome: { pt: 'Linguiça fresca', en: 'Fresh linguiça sausage', fr: 'Linguiça fraîche', es: 'Linguiça fresca' }, preco: '0,70 €' },
+        { nome: { pt: 'Peito de frango', en: 'Chicken breast', fr: 'Blanc de poulet', es: 'Pechuga de pollo' }, preco: '2,10 €' },
+        { nome: { pt: 'Bife de novilho', en: 'Veal steak', fr: 'Steak de bœuf', es: 'Bistec de ternera' }, preco: '2,50 €' },
+        { nome: { pt: 'Bifanas', en: 'Pork cutlets', fr: 'Bifanas (porc mariné)', es: 'Bifanas (lomo de cerdo)' }, preco: '2,00 €' },
+        { nome: { pt: 'Bacon', en: 'Bacon', fr: 'Bacon', es: 'Beicon' }, preco: '1,10 €' },
+        { nome: { pt: 'Queijo cheddar', en: 'Cheddar cheese', fr: 'Fromage cheddar', es: 'Queso cheddar' }, preco: '1,10 €' },
+        { nome: { pt: 'Queijo gouda', en: 'Gouda cheese', fr: 'Fromage gouda', es: 'Queso gouda' }, preco: '1,10 €' },
+        { nome: { pt: 'Fiambre', en: 'Ham', fr: 'Jambon', es: 'Jamón' }, preco: '1,10 €' },
+        { nome: { pt: 'Cebola frita e bacon', en: 'Fried onions and bacon', fr: 'Oignons frits et bacon', es: 'Cebolla frita y beicon' }, preco: '1,00 €' },
+        { nome: { pt: 'Pão saloio', en: 'Country bread', fr: 'Pain saloio', es: 'Pan saloio' }, preco: '1,10 €' },
+        { nome: { pt: 'Pão rústico', en: 'Rustic bread', fr: 'Pain rustique', es: 'Pan rústico' }, preco: '1,10 €' },
+        { nome: { pt: 'Pão de cachorro', en: 'Hot dog bun', fr: 'Pain à hot-dog', es: 'Pan de perrito caliente' }, preco: '1,00 €' },
+        { nome: { pt: 'Pão de forma', en: 'Sliced bread', fr: 'Pain de mie', es: 'Pan de molde' }, preco: '0,50 €' },
+        { nome: { pt: 'Rúcula', en: 'Rocket', fr: 'Roquette', es: 'Rúcula' }, preco: '0,70 €' },
+        { nome: { pt: 'Tomate cherry', en: 'Cherry tomato', fr: 'Tomate cerise', es: 'Tomate cherry' }, preco: '0,70 €' },
+        { nome: { pt: 'Molho de batata', en: 'Potato sauce', fr: 'Sauce pour frites', es: 'Salsa para patatas' }, preco: '0,50 €' },
+        { nome: { pt: 'Mostarda', en: 'Mustard', fr: 'Moutarde', es: 'Mostaza' }, preco: '0,40 €' },
+        { nome: { pt: "Manteiga d'alho", en: 'Garlic butter', fr: "Beurre à l'ail", es: 'Mantequilla de ajo' }, preco: '0,40 €' },
+        { nome: { pt: 'Para dividir por dois', en: 'To split in two', fr: 'Pour partager en deux', es: 'Para dividir en dos' }, preco: '3,00 €' },
+      ],
+    };
+
+    let idiomaAtual = localStorage.getItem('duforno-idioma') || 'pt';
+
+    function escapar(texto) {
+      const div = document.createElement('div');
+      div.textContent = texto;
+      return div.innerHTML;
+    }
+
+    function renderBadge(chave) {
+      if (!chave || !BADGES[chave]) return '';
+      return `<span class="etiqueta">${escapar(BADGES[chave][idiomaAtual])}</span>`;
+    }
+
+    function renderCartaoFoto(item, idx, catId) {
+      const foto = item.foto ? `<img src="${item.foto}" alt="${escapar(item.nome[idiomaAtual])}" loading="lazy" />` : '';
+      return `
+        <div class="item" data-cat="${catId}" data-idx="${idx}">
+          <div class="foto">${foto}</div>
+          <div class="info">
+            <div class="linha-topo">
+              <h3>${escapar(item.nome[idiomaAtual])}${renderBadge(item.badge)}</h3>
+              <span class="preco">${item.preco}</span>
+            </div>
+            <p>${escapar(item.desc[idiomaAtual])}</p>
+          </div>
+        </div>`;
+    }
+
+    function renderItemLista(item, idx, catId) {
+      const foto = item.foto ? `<img src="${item.foto}" alt="${escapar(item.nome[idiomaAtual])}" loading="lazy" />` : '';
+      return `
+        <div class="lista-item" data-cat="${catId}" data-idx="${idx}">
+          <div class="foto-metade">${foto}</div>
+          <div class="info-metade">
+            <div class="linha-topo">
+              <h3>${escapar(item.nome[idiomaAtual])}${renderBadge(item.badge)}</h3>
+              <span class="preco">${item.preco}</span>
+            </div>
+            <span class="ver-mais">${escapar(UI.verIngredientes[idiomaAtual])}</span>
+          </div>
+        </div>`;
+    }
+
+    function renderLinhaExtra(item) {
+      return `<div class="linha-extra"><span>${escapar(item.nome[idiomaAtual])}</span><span>${item.preco}</span></div>`;
+    }
+
+    function renderCategoria(cat) {
+      let corpo = '';
+      if (cat.tipo === 'fotos') {
+        corpo = `<div class="grelha-fotos">${cat.items.map((item, idx) => renderCartaoFoto(item, idx, cat.id)).join('')}</div>`;
+      } else {
+        corpo = `<div class="grelha-cartoes-horizontais">${cat.items.map((item, idx) => renderItemLista(item, idx, cat.id)).join('')}</div>`;
+      }
+      return `
+        <section class="categoria" id="${cat.id}">
+          <h2>${escapar(cat.nome[idiomaAtual])}</h2>
+          <p class="descricao-categoria">${escapar(cat.descricao[idiomaAtual])}</p>
+          ${corpo}
+        </section>`;
+    }
+
+    function renderBeber() {
+      const grupos = BEBER.grupos.map((grupo) => `
+        <p class="subtitulo-lista">${escapar(grupo.titulo[idiomaAtual])}</p>
+        ${grupo.items.map(renderLinhaExtra).join('')}
+      `).join('');
+      return `
+        <section class="categoria" id="${BEBER.id}">
+          <h2>${escapar(BEBER.nome[idiomaAtual])}</h2>
+          <p class="descricao-categoria">${escapar(BEBER.descricao[idiomaAtual])}</p>
+          <div class="lista">${grupos}</div>
+        </section>`;
+    }
+
+    function renderExtras() {
+      return `
+        <section class="categoria" id="${EXTRAS.id}">
+          <h2>${escapar(EXTRAS.nome[idiomaAtual])}</h2>
+          <p class="descricao-categoria">${escapar(EXTRAS.descricao[idiomaAtual])}</p>
+          <div class="lista grelha-extras">${EXTRAS.items.map(renderLinhaExtra).join('')}</div>
+        </section>`;
+    }
+
+    function todasCategorias() {
+      return [...CATEGORIAS, BEBER, EXTRAS];
+    }
+
+    function renderNav() {
+      const todas = todasCategorias();
+      const itens = document.getElementById('itens-nav-categorias');
+      itens.innerHTML = todas.map((cat, i) => `
+        <button data-categoria="${cat.id}" class="${i === 0 ? 'ativo' : ''}">${escapar(cat.nome[idiomaAtual])}</button>
+      `).join('');
+    }
+
+    function abrirMenu() {
+      document.getElementById('nav-categorias').classList.add('aberto');
+      document.getElementById('fundo-menu').classList.add('visivel');
+    }
+
+    function fecharMenu() {
+      document.getElementById('nav-categorias').classList.remove('aberto');
+      document.getElementById('fundo-menu').classList.remove('visivel');
+    }
+
+    let modalAtual = null;
+
+    function extrairIngredientes(desc) {
+      if (!desc) return [];
+      const conjuncaoPorIdioma = { pt: ' e ', en: ' and ', fr: ' et ', es: ' y ' };
+      const normalizado = desc.replace(new RegExp(conjuncaoPorIdioma[idiomaAtual], 'gi'), ', ');
+      return normalizado
+        .split(',')
+        .map((parte) => parte.trim().replace(/\.$/, ''))
+        .filter((parte) => parte.length > 1)
+        .map((parte) => parte.charAt(0).toUpperCase() + parte.slice(1));
+    }
+
+    function abrirModal(catId, idx) {
+      const cat = CATEGORIAS.find((c) => c.id === catId);
+      if (!cat) return;
+      const item = cat.items[idx];
+      if (!item) return;
+      modalAtual = { catId, idx };
+
+      const nomeCompleto = item.nome[idiomaAtual];
+      const [nomePrincipal, nomeSecundario] = nomeCompleto.split('|').map((parte) => parte && parte.trim());
+
+      document.getElementById('modal-nome-principal').textContent = nomePrincipal;
+      const secundarioEl = document.getElementById('modal-nome-secundario');
+      secundarioEl.textContent = nomeSecundario || '';
+      secundarioEl.style.display = nomeSecundario ? 'block' : 'none';
+
+      document.getElementById('modal-badge').innerHTML = renderBadge(item.badge);
+      document.getElementById('modal-preco').textContent = item.preco;
+
+      const descCurta = item.desc ? item.desc[idiomaAtual] : '';
+      const descParaModal = item.descModal ? item.descModal[idiomaAtual] : descCurta;
+      const paragrafos = Array.isArray(descParaModal) ? descParaModal : [descParaModal];
+      const descEl = document.getElementById('modal-desc');
+      descEl.innerHTML = paragrafos.filter(Boolean).map((p) => `<p>${escapar(p)}</p>`).join('');
+      descEl.style.display = descParaModal ? 'block' : 'none';
+
+      const tituloIngEl = document.getElementById('modal-ingredientes-titulo');
+      const listaIngEl = document.getElementById('modal-lista-ingredientes');
+      if (item.ingredientesFotos && item.ingredientesFotos.length) {
+        tituloIngEl.textContent = UI.ingredientesTitulo[idiomaAtual];
+        tituloIngEl.style.display = 'block';
+        listaIngEl.classList.add('lista-ingredientes-fotos');
+        listaIngEl.style.display = 'flex';
+        listaIngEl.innerHTML = item.ingredientesFotos.map((ing) => `
+          <div class="ingrediente-foto">
+            <img src="${ing.foto}" alt="${escapar(ing.nome[idiomaAtual])}" loading="lazy" />
+            <span>${escapar(ing.nome[idiomaAtual])}</span>
+          </div>`).join('');
+      } else {
+        listaIngEl.classList.remove('lista-ingredientes-fotos');
+        const ingredientes = extrairIngredientes(descCurta);
+        if (ingredientes.length) {
+          tituloIngEl.textContent = UI.ingredientesTitulo[idiomaAtual];
+          tituloIngEl.style.display = 'block';
+          listaIngEl.style.display = 'flex';
+          listaIngEl.innerHTML = ingredientes.map((ing) => `<span class="tag-ingrediente">${escapar(ing)}</span>`).join('');
+        } else {
+          tituloIngEl.style.display = 'none';
+          listaIngEl.style.display = 'none';
+          listaIngEl.innerHTML = '';
+        }
+      }
+
+      const fotoEl = document.getElementById('modal-foto');
+      fotoEl.innerHTML = item.foto ? `<img src="${item.foto}" alt="${escapar(nomePrincipal)}" />` : '';
+
+
+      document.getElementById('fundo-modal').classList.add('visivel');
+      document.getElementById('modal-prato').classList.add('aberto');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function fecharModal() {
+      modalAtual = null;
+      document.getElementById('fundo-modal').classList.remove('visivel');
+      document.getElementById('modal-prato').classList.remove('aberto');
+      document.body.style.overflow = '';
+    }
+
+    function navegarModal(delta) {
+      if (!modalAtual) return;
+      const cat = CATEGORIAS.find((c) => c.id === modalAtual.catId);
+      if (!cat) return;
+      const novoIdx = (modalAtual.idx + delta + cat.items.length) % cat.items.length;
+      abrirModal(modalAtual.catId, novoIdx);
+    }
+
+    function inicializarModal() {
+      document.getElementById('modal-fechar').addEventListener('click', fecharModal);
+      document.getElementById('fundo-modal').addEventListener('click', fecharModal);
+    }
+
+    function renderSeletorIdiomas() {
+      const seletor = document.getElementById('seletor-idiomas');
+      seletor.innerHTML = IDIOMAS.map((idioma) => `
+        <button data-idioma="${idioma.codigo}" class="${idioma.codigo === idiomaAtual ? 'ativo' : ''}">${idioma.bandeiraSvg}${idioma.rotulo}</button>
+      `).join('');
+      seletor.querySelectorAll('button').forEach((botao) => {
+        botao.addEventListener('click', () => {
+          idiomaAtual = botao.dataset.idioma;
+          localStorage.setItem('duforno-idioma', idiomaAtual);
+          renderTudo();
+        });
+      });
+    }
+
+    function renderTextosFixos() {
+      document.documentElement.lang = idiomaAtual;
+      document.title = UI.tituloAba[idiomaAtual];
+      document.getElementById('texto-subtitulo').textContent = UI.subtitulo[idiomaAtual];
+      document.getElementById('texto-ementa').textContent = UI.ementa[idiomaAtual];
+      document.getElementById('rodape-nome').textContent = UI.rodapeNome[idiomaAtual];
+      document.getElementById('rodape-aviso').textContent = UI.aviso[idiomaAtual];
+      document.getElementById('texto-botao-menu').textContent = UI.menuBotao[idiomaAtual];
+      document.getElementById('texto-cabecalho-menu').textContent = UI.menuCabecalho[idiomaAtual];
+    }
+
+    function ativarNavegacaoEObservador() {
+      const botoes = document.querySelectorAll('nav.categorias button[data-categoria]');
+      const seccoes = document.querySelectorAll('section.categoria');
+
+      botoes.forEach((botao) => {
+        botao.addEventListener('click', () => {
+          botoes.forEach((b) => b.classList.remove('ativo'));
+          botao.classList.add('ativo');
+          const destino = document.getElementById(botao.dataset.categoria);
+          if (destino) destino.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          fecharMenu();
+        });
+      });
+
+      const observador = new IntersectionObserver(
+        (entradas) => {
+          entradas.forEach((entrada) => {
+            if (entrada.isIntersecting) {
+              botoes.forEach((b) => b.classList.remove('ativo'));
+              const botaoAtivo = document.querySelector(`nav.categorias button[data-categoria="${entrada.target.id}"]`);
+              if (botaoAtivo) botaoAtivo.classList.add('ativo');
+            }
+          });
+        },
+        { rootMargin: '-45% 0px -45% 0px' }
+      );
+
+      seccoes.forEach((seccao) => observador.observe(seccao));
+
+      document.querySelectorAll('.item[data-cat], .lista-item[data-cat]').forEach((el) => {
+        el.addEventListener('click', () => abrirModal(el.dataset.cat, parseInt(el.dataset.idx, 10)));
+      });
+    }
+
+    function inicializarMenuGaveta() {
+      document.getElementById('botao-abrir-menu').addEventListener('click', abrirMenu);
+      document.getElementById('botao-fechar-menu').addEventListener('click', fecharMenu);
+      document.getElementById('fundo-menu').addEventListener('click', fecharMenu);
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') { fecharModal(); fecharMenu(); }
+        else if (modalAtual && e.key === 'ArrowRight') navegarModal(1);
+        else if (modalAtual && e.key === 'ArrowLeft') navegarModal(-1);
+      });
+    }
+
+    function renderTudo() {
+      fecharModal();
+      renderSeletorIdiomas();
+      renderTextosFixos();
+      renderNav();
+
+      const conteudo = document.getElementById('conteudo');
+      conteudo.innerHTML =
+        CATEGORIAS.map(renderCategoria).join('') +
+        renderBeber() +
+        renderExtras();
+
+      ativarNavegacaoEObservador();
+    }
+
+    inicializarMenuGaveta();
+    inicializarModal();
+    renderTudo();
+  </script>
+</body>
+</html>
