@@ -3,3 +3,7 @@ imagens/*.jpg
 imagens/*.jpeg
 imagens/*.png
 imagens/*.mp4
+
+# Ficheiro de controlo interno da ementa (não faz parte do site)
+produtos-ementa.xlsx
+~$*.xlsx

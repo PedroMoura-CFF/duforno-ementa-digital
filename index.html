@@ -389,6 +389,10 @@
     object-fit: cover;
     display: block;
   }
+  .lista-item .foto-metade img.simbolo {
+    object-fit: contain;
+    padding: 22px;
+  }
   .lista-item .info-metade {
     flex: 1 1 58%;
     min-width: 0;
@@ -566,6 +570,7 @@
     overflow: hidden;
   }
   .modal-foto img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .modal-foto img.simbolo { object-fit: contain; padding: 50px; }
 
   .modal-corpo { padding: 1.5rem 1.6rem 1.9rem; }
 
@@ -1102,6 +1107,7 @@
           },
           {
             nome: { pt: 'Francesinha', en: 'Francesinha', fr: 'Francesinha', es: 'Francesinha' },
+            foto: 'imagens/web/francesinha.jpg',
             preco: '11,45 €',
             desc: {
               pt: 'Bife de novilho, fiambre, salsicha e linguiça frescas, queijo gouda e molho de francesinha.',
@@ -1277,6 +1283,8 @@
         items: [
           {
             nome: { pt: 'Mini francesinha', en: 'Mini francesinha', fr: 'Mini francesinha', es: 'Mini francesinha' },
+            foto: 'imagens/web/icone-infantil.jpg',
+            simbolo: true,
             preco: '9,70 €',
             desc: {
               pt: 'Bife de novilho, fiambre, queijo gouda, batata e molho de francesinha.',
@@ -1287,6 +1295,8 @@
           },
           {
             nome: { pt: 'Escolha do mini chefe', en: "Mini Chef's Choice", fr: 'Le choix du mini-chef', es: 'La elección del mini chef' },
+            foto: 'imagens/web/icone-infantil.jpg',
+            simbolo: true,
             preco: '7,50 €',
             desc: {
               pt: 'Escolha entre bife de novilho grelhado, frango grelhado ou salsicha viena grelhada, servido com queijo cheddar, tomate cherry, batata frita e molho.',
@@ -1467,7 +1477,8 @@
     }
 
     function renderItemLista(item, idx, catId) {
-      const foto = item.foto ? `<img src="${item.foto}" alt="${escapar(item.nome[idiomaAtual])}" loading="lazy" />` : '';
+      const classeFoto = item.simbolo ? 'simbolo' : '';
+      const foto = item.foto ? `<img class="${classeFoto}" src="${item.foto}" alt="${escapar(item.nome[idiomaAtual])}" loading="lazy" />` : '';
       return `
         <div class="lista-item" data-cat="${catId}" data-idx="${idx}">
           <div class="foto-metade">${foto}</div>
@@ -1610,7 +1621,9 @@
       }
 
       const fotoEl = document.getElementById('modal-foto');
-      fotoEl.innerHTML = item.foto ? `<img src="${item.foto}" alt="${escapar(nomePrincipal)}" />` : '';
+      fotoEl.innerHTML = item.foto
+        ? `<img class="${item.simbolo ? 'simbolo' : ''}" src="${item.foto}" alt="${escapar(nomePrincipal)}" />`
+        : '';
 
 
       document.getElementById('fundo-modal').classList.add('visivel');
