@@ -1,0 +1,14 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "ementa-duforno",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "-e",
+        "const h=require('http'),f=require('fs'),p=require('path'),r=process.cwd(),t={'.html':'text/html; charset=utf-8','.jpg':'image/jpeg','.png':'image/png'};h.createServer((q,s)=>{const x=p.join(r,decodeURIComponent(q.url.split('?')[0]).replace(/^\\/+/,'')||'index.html');if(!x.startsWith(r)){s.writeHead(403);return s.end();}f.readFile(x,(e,d)=>{if(e){s.writeHead(404);return s.end();}s.writeHead(200,{'Content-Type':t[p.extname(x)]||'application/octet-stream'});s.end(d);});}).listen(5173,'127.0.0.1',()=>console.log('Ementa em http://127.0.0.1:5173/'));"
+      ],
+      "port": 5173
+    }
+  ]
+}

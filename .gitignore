@@ -5,5 +5,8 @@ imagens/*.png
 imagens/*.mp4
 
 # Ficheiro de controlo interno da ementa (não faz parte do site)
-produtos-ementa.xlsx
+produtos-ementa*.xlsx
 ~$*.xlsx
+
+# QR codes gerados para impressão (ficam só localmente)
+qr-code/
