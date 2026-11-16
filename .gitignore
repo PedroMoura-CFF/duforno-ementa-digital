@@ -10,3 +10,6 @@ produtos-ementa*.xlsx
 
 # QR codes gerados para impressão (ficam só localmente)
 qr-code/
+
+# Documentos de revisão trocados com Qualidade e Marketing (ficam só localmente)
+documentos/
